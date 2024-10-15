@@ -16,7 +16,7 @@ export default function Register() {
 
   const hdlChange = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
-    console.log(input);
+    // console.log(input);
   };
 
   const hdlRegister = async (e) => {

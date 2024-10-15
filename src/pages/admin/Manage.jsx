@@ -1,5 +1,5 @@
 import React from 'react'
-import TableMember from './TableMember'
+import TableMember from '../../components/admin/TableMember'
 
 export default function Manage() {
   return (

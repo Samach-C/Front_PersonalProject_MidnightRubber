@@ -8,6 +8,8 @@ const classLink =
 export default function AdminSidebar() {
   const logout = useUserStore( state => state.logout)
 
+  const user = useUserStore( state => state.user)
+
   const navigate = useNavigate()
   
   const hdlLogout = () => {
@@ -19,7 +21,7 @@ export default function AdminSidebar() {
       {/* Profile */}
       <div className="flex flex-col items-center gap-2 py-4">
         <ProfileIcon className="w-20" />
-        <span className="text-lg ">Profile</span>
+        <span className="text-lg text-yellow-400 ">{user.role}</span>
       </div>
 
       {/* Menu Link */}

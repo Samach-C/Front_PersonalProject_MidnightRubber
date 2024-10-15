@@ -38,8 +38,8 @@ export default function Login() {
       // toast.success("Login Successful")
       // toast.success(JSON.stringify(data))
     } catch(err) {
-      const errMsg = err.response?.data?.error || err.message
-      console.log(errMsg)
+      const errMsg = err.response?.data?.message || err.message
+      console.log(err.response.data.message)
       toast.error(errMsg)
     }
   }

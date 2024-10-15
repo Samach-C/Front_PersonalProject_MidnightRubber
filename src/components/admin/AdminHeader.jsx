@@ -8,6 +8,8 @@ const AdminHeader = () => {
 
   const navigate = useNavigate()
   const logout = useUserStore(state => state.logout)
+
+  const user = useUserStore(state => state.user)
   
   const hdlLogout = () => {
     logout()
@@ -24,14 +26,11 @@ const AdminHeader = () => {
           <ProfileIcon
             className="w-8"
           />
-          Profile
+          <span className="text-lg text-yellow-400">{user.role}</span>
           {/* Profile */}
           <ArrowDownIcon className="w-3 flex flex-1" />
         </button>
         <ul className="absolute bg-neutral-500 rounded-lg w-full hidden group-hover:block">
-          <li className="py-2 px-3 cursor-pointer rounded-sm hover:bg-neutral-200 hover:duration-200 active:bg-green-400">
-            Username
-          </li>
           <li 
           onClick={hdlLogout}
           className="py-2 px-3 cursor-pointer rounded-sm hover:bg-neutral-200 hover:duration-200 active:bg-green-400">

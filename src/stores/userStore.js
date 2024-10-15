@@ -16,7 +16,7 @@ const useUserStore = create(persist ((set, get) => ({
     logout: () => {
         // console.log("logout")
         set({token: "", user: null})
-    }
+    },
 }), {
     name: "state",
     storage: createJSONStorage(() => localStorage)

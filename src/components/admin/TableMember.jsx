@@ -14,7 +14,8 @@ export default function TableMember() {
   useEffect(() => {
     getData();
   }, []);
-
+  
+  // ดูข้อมูล
   const getData = async () => {
     try {
       const resp = await listMember(); // เรียกใช้ listMember จาก store
@@ -55,7 +56,12 @@ export default function TableMember() {
           <tr>
             <th scope="col">No.</th>
             <th scope="col">Email</th>
+            <th scope="col">FirstName</th>
+            <th scope="col">LastName</th>
+            <th scope="col">UserID</th>
             <th scope="col">Role</th>
+            <th scope="col">CreatedAt</th>
+            <th scope="col">UpdatedAt</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
@@ -67,6 +73,12 @@ export default function TableMember() {
               <tr key={index}>
                 <th scope="row">{index + 1}</th>
                 <td>{item.email}</td>
+
+                <td>{item.firstName}</td>
+
+                <td>{item.lastName}</td>
+
+                <td>{item.id}</td>
 
                 <td>
                   <select
@@ -82,8 +94,15 @@ export default function TableMember() {
                   </select>
                 </td>
 
+                <td>{item.createdAt}</td>
+                <td>{item.updatedAt}</td>
+
                 <td>
-                  <button className="btn btn-xs btn-error" onClick={() => hdlRemoveMember(item.id)}>Delete</button>
+                  {item.role !== "ADMIN" ? (
+                    <button className="btn btn-xs btn-error" onClick={() => hdlRemoveMember(item.id)}>Delete</button>
+                  ) : (
+                    <span className="text-gray-500">Cannot delete ADMIN</span>
+                  )}
                 </td>
               </tr>
             );
@@ -93,36 +112,3 @@ export default function TableMember() {
     </div>
   );
 }
-
-// try {
-//   const resp = await listMember()
-//   console.log(resp)
-//   setMember(resp.data)
-// } catch (err) {
-//   console.log(err)
-// }
-
-// const hdlRemoveMember = async(id) => {
-//   // try {
-//   //   const resp = await removeMember(token, id);
-//   //   console.log(resp);
-//   //   getData();
-//   // } catch (err) {
-//   //   console.log(err);
-//   // }
-//   // // console.log(id);
-// };
-
-// const hdlUpdateMember = async(e, id) => {
-//   // // console.log(e.target.value, id)
-//   // const role = e.target.value
-//   // console.log({role})
-//   // try {
-//   //   const resp = await updateMember(token, id, { role })
-//   //   console.log(resp)
-//   //   toast.success(resp.data.message)
-//   //   getData()
-//   // } catch (err) {
-//   //   console.log(err)
-//   // }
-// }

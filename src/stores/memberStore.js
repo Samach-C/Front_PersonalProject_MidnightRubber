@@ -54,30 +54,3 @@ const useMemberStore = create((set, get) => ({
   
 
 export default useMemberStore
-
-
-
-
-
-// const useMemberStore = create((set, get) => ({
-//     listMember : () => {
-//         axios.get("http://localhost:5588/member")
-//         console.log(listMember)
-//     },
-
-//     removeMember : (token, id) => {
-//         axios.delete("http://localhost:5588/member/" + id, {
-//             headers: {
-//               Authorization: `Bearer ${token}`,
-//             },
-//           });
-//     },
-
-//     updateMember : (token, id, form) => {
-//         axios.patch("http://localhost:5588/member/" + id, form, {
-//             headers: {
-//                 Authorization: `Bearer ${token}`,
-//             }
-//         })
-//     }
-// }))

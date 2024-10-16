@@ -7,21 +7,22 @@ import {
   NavigateIcon,
   AddLabelIcon,
 } from "../icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import useUserStore from "../stores/userStore";
 import Avatar from "./user/Avatar";
 
 export default function MainNav() {
   const user = useUserStore((state) => state.user);
 
+
   // console.log(user)
   return (
     <header className="h-[80px] w-full fixed top-0 z-10 px-3 flex justify-between shadow-lg bg-slate-500">
       {/* Logo + input */}
       <div className="flex gap-2 items-center flex-1">
-        <RubberLogo className="w-12" />
-        <p className="text-3xl text-orange-300">Midnight</p>{" "}
-        <p className="text-3xl">Rubber</p>
+          <RubberLogo className="w-12" />
+          <p className="text-3xl text-orange-300">Midnight</p>{" "}
+          <p className="text-3xl">Rubber</p>
         <label className="input input-bordered flex items-center gap-2 w-64 h-10 rounded-full">
           <input type="text" className="grow" placeholder="Search" />
           <SearchIcon />

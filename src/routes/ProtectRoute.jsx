@@ -32,7 +32,7 @@ const ProtectRoute = ({ element, allow }) => {
       } else {
         setIsAllowed(false);
       }
-    } catch (error) {
+    } catch (err) {
       console.log(err);
       setIsAllowed(false);
     }

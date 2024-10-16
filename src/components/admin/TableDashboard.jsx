@@ -1,0 +1,171 @@
+import React, { useEffect, useState } from "react";
+import useUserStore from "../../stores/userStore";
+import useLandmarkStore from "../../stores/landmarkStore";
+
+export default function TableDashboard() {
+  const [landmark, setLandmark] = useState([]);
+  const [editRowId, setEditRowId] = useState(null); //ติดตามแถวที่กำลังถูกแก้ไข
+  const [editedLandmark, setEditedLandmark] = useState({}); //เก็บค่าที่ถูกแก้ไข
+
+  const token = useUserStore((state) => state.token);
+
+  const fetchLandmarks = useLandmarkStore((state) => state.fetchLandmarks);
+  const deleteLandmark = useLandmarkStore((state) => state.deleteLandmark);
+  const updateLandmark = useLandmarkStore((state) => state.updateLandmark);
+
+  useEffect(() => {
+    getLandmarkData();
+  }, []);
+
+  // ดูข้อมูลแผนที่
+  const getLandmarkData = async () => {
+    try {
+      const resp = await fetchLandmarks();
+    //   console.log(resp);
+      setLandmark(resp);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // ลบสมาชิก
+  const hdlDeleteLandmark = async (id) => {
+    try {
+      await deleteLandmark(token, id)
+      getLandmarkData()
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // อัพเดตข้อมูล
+  const hdlUpdateMessage = async (id) => {
+    try {
+      await updateLandmark(token, id, editedLandmark);
+      getLandmarkData();
+      setEditRowId(null);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  // การแก้ไขแถว
+  const startEditing = (id, currentTitle, currentDetail) => {
+    setEditRowId(id);
+    setEditedLandmark({ title: currentTitle, detail: currentDetail });
+  };
+
+  // ยกเลิกการแก้ไข
+  const cancelEditing = () => {
+    setEditRowId(null);
+    setEditedLandmark({});
+  };
+
+  // จัดการกับการเปลี่ยนแปลงของfill input
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditedLandmark({ ...editedLandmark, [name]: value });
+  };
+
+  return (
+    <div className="overflow-x-auto">
+      <table className="table">
+        <thead>
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Title</th>
+            <th scope="col">Detail</th>
+            <th scope="col">UserID</th>
+            <th scope="col">CreatedAt</th>
+            <th scope="col">UpdatedAt</th>
+            <th scope="col">Latitude</th>
+            <th scope="col">Longitude</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {landmark.map((item, index) => {
+            // console.log(item);
+            return (
+              <tr key={index}>
+                <th scope="row">{index + 1}</th>
+                <td>
+                  {editRowId === item.id ? (
+                    <input
+                      type="text"
+                      name="title"
+                      value={editedLandmark.title}
+                      onChange={handleInputChange}
+                    />
+                  ) : (
+                    item.title
+                  )}
+                </td>
+
+                <td>
+                  {editRowId === item.id ? (
+                    <input
+                      type="text"
+                      name="detail"
+                      value={editedLandmark.detail || ""}
+                      onChange={handleInputChange}
+                    />
+                  ) : (
+                    item.detail
+                  )}
+                </td>
+
+                <td>{item.id}</td>
+
+                <td>{item.createdAt}</td>
+
+                <td>{item.updatedAt}</td>
+
+                <td>{item.lat}</td>
+
+                <td>{item.lng}</td>
+
+                <td>
+                  {editRowId === item.id ? (
+                    <>
+                      <button
+                        className="btn btn-xs btn-success"
+                        onClick={() => hdlUpdateMessage(item.id)}
+                      >
+                        Save
+                      </button>
+                      <button
+                        className="btn btn-xs btn-secondary"
+                        onClick={cancelEditing}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        className="btn btn-xs btn-warning"
+                        onClick={() =>
+                          startEditing(item.id, item.title, item.detail)
+                        }
+                      >
+                        Edit
+                      </button>
+                      <button
+                        className="btn btn-xs btn-error"
+                        onClick={() => hdlDeleteLandmark(item.id)}
+                      >
+                        Delete
+                      </button>
+                    </>
+                  )}
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+}

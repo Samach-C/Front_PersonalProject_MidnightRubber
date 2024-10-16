@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function Avatar() {
   const logout = useUserStore((state) => state.logout);
+  const user = useUserStore(state => state.user)
 
   const navigate = useNavigate();
 
@@ -15,10 +16,13 @@ export default function Avatar() {
   return (
     <div className="dropdown dropdown-end">
       <div tabIndex={0} role="button" className="btn-circle">
-        <div>
-          <UserIcon className="w-14" />
+        <div className="text-yellow-300 text-xs">
+          <UserIcon className="w-10" />
+          <div className="text-center">
+          {user.role}
+          </div>
         </div>
-        <ArrowDownIcon className="absolute -bottom-2 -right-1 w-4" />
+        <ArrowDownIcon className="absolute -bottom-3 -right-1 w-4" />
         <ul
           tabIndex={0}
           className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"

@@ -37,7 +37,7 @@ const useLandmarkStore = create((set, get) => ({
     },
 
     // ลบ landmark
-    deleteLandmark: async(id) => {
+    deleteLandmark: async(token, id) => {
         try {
             await axios.delete(`http://localhost:5588/landmark/${id}`, {
                 headers: {

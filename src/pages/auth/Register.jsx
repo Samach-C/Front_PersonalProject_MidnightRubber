@@ -23,6 +23,8 @@ export default function Register() {
     // console.log(input.password, input.confirmPassword)
 
     e.preventDefault();
+
+    // console.log(input)
     // validation
     const error = validateRegister(input);
 
@@ -36,7 +38,7 @@ export default function Register() {
         "http://localhost:5588/register",
         input
       );
-      console.log(result.data)
+      // console.log(result.data)
       setInput({
           firstName: "",
           lastName: "",
@@ -47,9 +49,15 @@ export default function Register() {
       e.target.closest("dialog").close()
       toast.success("Welcome new user")
     } catch (err) {
-      const errMsg = err.response?.data?.error || err.message;
-      console.log(errMsg)
-      toast.error(errMsg)
+      if (err.response) {
+        const errMsg = err.response.data.error || err.response.data.message || "Something went wrong!";
+        toast.error(errMsg);
+      } else {
+        toast.error("Network error or server not responding");
+      }
+      // const errMsg = err.response?.data?.error || err.message;
+      // console.log(errMsg)
+      // toast.error(errMsg)
     }
   };
 

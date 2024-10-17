@@ -14,15 +14,14 @@ import Avatar from "./user/Avatar";
 export default function MainNav() {
   const user = useUserStore((state) => state.user);
 
-
   // console.log(user)
   return (
     <header className="h-[80px] w-full fixed top-0 z-10 px-3 flex justify-between shadow-lg bg-slate-500">
       {/* Logo + input */}
       <div className="flex gap-2 items-center flex-1">
-          <RubberLogo className="w-12" />
-          <p className="text-3xl text-orange-300">Midnight</p>{" "}
-          <p className="text-3xl">Rubber</p>
+        <RubberLogo className="w-12" />
+        <p className="text-3xl text-orange-300">Midnight</p>{" "}
+        <p className="text-3xl">Rubber</p>
         <label className="input input-bordered flex items-center gap-2 w-64 h-10 rounded-full">
           <input type="text" className="grow" placeholder="Search" />
           <SearchIcon />
@@ -53,8 +52,14 @@ export default function MainNav() {
                   Add label
                 </a>
               </li>
+
               <li>
-                <a className="text-xl gap-6">
+                <a
+                  className="text-xl gap-6"
+                  href="https://www.google.com/maps"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
                   <NavigateIcon className="w-8" />
                   Navigate
                 </a>

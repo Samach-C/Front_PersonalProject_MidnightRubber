@@ -19,7 +19,7 @@ export default function TableMember() {
   const getData = async () => {
     try {
       const resp = await listMember(); // เรียกใช้ listMember จาก store
-      console.log(resp);
+      // console.log(resp);
       setMember(resp); // ใช้ข้อมูลสมาชิกที่ได้จากการเรียก API
     } catch (err) {
       console.log(err);

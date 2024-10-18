@@ -9,6 +9,7 @@ const useLandmarkStore = create((set, get) => ({
     fetchLandmarks: async() => {
         try {
             const response = await axios.get("http://localhost:5588/landmark")
+            // console.log("Fetched landmarks:", response.data)
             set({ landmarks: response.data })
             return response.data
         } catch (error) {
@@ -25,9 +26,10 @@ const useLandmarkStore = create((set, get) => ({
                     Authorization: `Bearer ${token}`
                   },
             })
+            console.log("Updated landmark id:", id)
             set({
                 landmarks: get().landmarks.map((landmark) =>
-                    landmark.id === id ? { ...landmark, ...updatedData} : landmark
+                    landmark?.id === id ? { ...landmark, ...updatedData} : landmark
                 )
             })
             return response.data
@@ -44,7 +46,7 @@ const useLandmarkStore = create((set, get) => ({
                     Authorization: `Bearer ${token}`
                   },
             })
-            
+            console.log("Deleted landmark id:", id)
             set({
                 landmarks: get().landmarks.filter((landmark) => landmark.id !== id)
             })

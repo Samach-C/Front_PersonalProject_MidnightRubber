@@ -5,13 +5,14 @@ export default function LandmarkForm({ position, form, setForm, hdlSubmit }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+
   return (
     <form onSubmit={hdlSubmit} className="flex flex-col gap-3 p-4 pt-10">
       <p>Title :</p>
       <textarea
         name="title"
         onChange={hdlOnchange}
-        value={form.title}
+        // value={form.title}
         type="title"
         className="textarea textarea-bordered"
         placeholder="Store Name"
@@ -21,7 +22,7 @@ export default function LandmarkForm({ position, form, setForm, hdlSubmit }) {
       <textarea
         name="detail"
         onChange={hdlOnchange}
-        value={form.detail}
+        // value={form.detail}
         type="detail"
         className="textarea textarea-bordered"
         placeholder="Tel & Detail "

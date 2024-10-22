@@ -3,7 +3,6 @@ import MainNav from "../../components/MainNav";
 import useUserStore from "../../stores/userStore";
 import Register from "./Register";
 import { toast } from "react-toastify";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 
@@ -14,6 +13,16 @@ export default function Login() {
     email: "",
     password: "",
   })
+
+  const [reInput, setReInput] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [formErrors, setFormErrors] = useState({});
 
   const hdlChange = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value}))
@@ -27,21 +36,29 @@ export default function Login() {
         return toast.warning("Please fill all input")
       }
       try {
-      // const result = await axios.post("http://localhost:5588/login", input)
       let data = await login(input)
-      console.log(data.user.role)
+      // console.log(data.user.role)
       if(data.user.role == "ADMIN") {
         navigate("/admin")
       }else {
         navigate("/")
       }
-      // toast.success("Login Successful")
-      // toast.success(JSON.stringify(data))
     } catch(err) {
       const errMsg = err.response?.data?.message || err.message
       console.log(err.response.data.message)
       toast.error(errMsg)
     }
+  }
+
+  const clearRegisterForm = () => {
+    setReInput({
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    })
+    setFormErrors({})
   }
   return (
     <>
@@ -52,7 +69,7 @@ export default function Login() {
             <div className="card-body gap-3 p-4">
               <input
                 type="text"
-                placeholder="E-mail or Phone number"
+                placeholder="E-mail"
                 className="input input-bordered w-full"
                 name="email"
                 value={input.email}
@@ -89,12 +106,15 @@ export default function Login() {
           <button
             type="button"
             className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
-            onClick={(e) => e.target.closest("dialog").close()}
+            onClick={(e) => {
+              clearRegisterForm()
+              e.target.closest("dialog").close()
+            }}
           >
             ✕
           </button>
 
-          <Register />
+          <Register input={reInput} setInput={setReInput} formErrors={formErrors} setFormErrors={setFormErrors} />
         </div>
       </dialog>
     </>

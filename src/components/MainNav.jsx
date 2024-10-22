@@ -11,9 +11,12 @@ import { Link, useNavigate } from "react-router-dom";
 import useUserStore from "../stores/userStore";
 import Avatar from "./user/Avatar";
 
-export default function MainNav() {
+export default function MainNav({ setSearchTerm }) {
   const user = useUserStore((state) => state.user);
 
+  const handleSearch = (e) => {
+    setSearchTerm(e.target.value); // อัปเดตคำค้นหาเมื่อผู้ใช้พิมพ์ใน input
+  };
   // console.log(user)
   return (
     <header className="h-[80px] w-full fixed top-0 z-10 px-3 flex justify-between shadow-lg bg-slate-500">
@@ -23,7 +26,12 @@ export default function MainNav() {
         <p className="text-3xl text-orange-300">Midnight</p>{" "}
         <p className="text-3xl">Rubber</p>
         <label className="input input-bordered flex items-center gap-2 w-64 h-10 rounded-full">
-          <input type="text" className="grow" placeholder="Search" />
+          <input 
+            type="text" 
+            className="grow" 
+            placeholder="Search"
+            onChange={handleSearch} 
+          />
           <SearchIcon />
         </label>
         {/* Right Menu */}

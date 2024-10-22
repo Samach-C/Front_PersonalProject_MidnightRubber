@@ -30,13 +30,6 @@ export default function LandmarkPopup({
     setForm({ title: "", detail: "", lat: "", lng: "" }); // ล้างค่าในฟอร์ม
   };
 
-  const handlePopupClose = (e) => {
-console.log("11111",e)
-
-    setIsEdit(false)
-    setForm({title: "", detail: "", lat: "", lng: ""})
-  }
-
   if(!item) return null // ตรวจสอบว่า item มีค่า
 
   return (

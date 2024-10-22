@@ -13,12 +13,12 @@ import "leaflet/dist/leaflet.css";
 import * as L from "leaflet";
 import CurrentPositionButton from "./CurrentPositionButton";
 import LandmarkPopup from "./LabdmarkPopup";
-import tire from "../../assets/tire.png"
+import tire from "../../assets/tire.png";
 
 function LocationMarker({ setPosition, form, setForm, position }) {
   const map = useMapEvents({
     click: (e) => {
-      console.log("Click", e.latlng)
+      console.log("Click", e.latlng);
       setPosition(e.latlng);
       map.flyTo(e.latlng, 18);
       setForm((prevForm) => ({
@@ -40,13 +40,14 @@ export default function LandmarkMap({
   handleDelete,
   form,
   user,
+  SearchTerm,
 }) {
   const [myPosition, setMyPosition] = useState(null);
   const serviceIcon = L.icon({
     iconUrl: tire,
     iconSize: [25, 25],
   });
-    // console.log(serviceIcon)
+  // console.log(serviceIcon)
 
   const MyLocation = ({ myPosition, setMyPosition }) => {
     const map = useMap();
@@ -84,6 +85,18 @@ export default function LandmarkMap({
     return myPosition ? <Marker position={myPosition}></Marker> : null;
   };
 
+  let landmarksForMap = null;
+
+  if (SearchTerm) {
+    landmarksForMap = landmarks?.filter(
+      (item) =>
+        item.title &&
+        item.title.toLowerCase().includes(SearchTerm.toLowerCase())
+    );
+  } else {
+    landmarksForMap = [...landmarks];
+  }
+
   return (
     <MapContainer
       center={[13, 100]}
@@ -107,8 +120,12 @@ export default function LandmarkMap({
 
         <LayersControl.Overlay name="Landmark" checked>
           <LayerGroup>
-            {landmarks?.map((item, index) => (
-              <Marker key={index} icon={serviceIcon} position={[item.lat, item.lng]}>
+            {landmarksForMap?.map((item, index) => (
+              <Marker
+                key={index}
+                icon={serviceIcon}
+                position={[item.lat, item.lng]}
+              >
                 {/* เรียกใช้ LandmarkPopup ที่แยกออกมา */}
                 <LandmarkPopup
                   item={item}
@@ -126,7 +143,12 @@ export default function LandmarkMap({
       </LayersControl>
 
       <MyLocation myPosition={myPosition} setMyPosition={setMyPosition} />
-      <LocationMarker position={position} setPosition={setPosition} form={form} setForm={setForm} />
+      <LocationMarker
+        position={position}
+        setPosition={setPosition}
+        form={form}
+        setForm={setForm}
+      />
       <CurrentPositionButton />
     </MapContainer>
   );

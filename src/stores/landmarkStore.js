@@ -5,6 +5,17 @@ import { create } from "zustand";
 const useLandmarkStore = create((set, get) => ({
     landmarks: [], //เก็บรายการ landmark
 
+    createLandmarks:  async(form, token) => {
+        try {
+            const response = await axios.post("http://localhost:5588/landmark", form, {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+              set((state) => ({ landmarks:[...get().landmarks, response.data]}))
+        } catch (error) {
+            console.log("Error creating landmark:", error)
+        }
+    },
+
     // อ่านข้อมูล landmark
     fetchLandmarks: async() => {
         try {
@@ -57,14 +68,3 @@ const useLandmarkStore = create((set, get) => ({
 }))
 
 export default useLandmarkStore
-
-
-    // // เพิ่ม landmark
-    // addLandmark: async(landmarkData) => {
-    //     try {
-    //         const response = await axios.post("http://localhost:5588/landmark", landmarkData)
-    //         set({ landmarks: [...get().landmarks, response.data] })
-    //     } catch (error) {
-    //         console.error("Error adding landmark:", error)
-    //     }
-    // },

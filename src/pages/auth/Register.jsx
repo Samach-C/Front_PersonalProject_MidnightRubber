@@ -1,18 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import validateRegister from "../../utils/validators";
 
-export default function Register() {
-  const [input, setInput] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-
-  const [formErrors, setFormErrors] = useState({});
+export default function Register({input, setInput, formErrors, setFormErrors}) {
 
   const hdlChange = (e) => {
     setInput((prv) => ({ ...prv, [e.target.name]: e.target.value }));
@@ -20,10 +11,7 @@ export default function Register() {
   };
 
   const hdlRegister = async (e) => {
-    // console.log(input.password, input.confirmPassword)
-
     e.preventDefault();
-
     // console.log(input)
     // validation
     const error = validateRegister(input);
@@ -55,9 +43,6 @@ export default function Register() {
       } else {
         toast.error("Network error or server not responding");
       }
-      // const errMsg = err.response?.data?.error || err.message;
-      // console.log(errMsg)
-      // toast.error(errMsg)
     }
   };
 
@@ -66,7 +51,7 @@ export default function Register() {
       <div className="flex gap-2">
         <input
           type="text"
-          placeholder="First name"
+          placeholder="Firstname"
           className="input input-bordered w-full"
           name="firstName"
           value={input.firstName}
@@ -77,7 +62,7 @@ export default function Register() {
         )}
         <input
           type="text"
-          placeholder="Surname"
+          placeholder="Lastname"
           className="input input-bordered w-full"
           name="lastName"
           value={input.lastName}

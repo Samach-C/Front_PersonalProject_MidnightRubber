@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useUserStore from "../../stores/userStore";
 import useLandmarkStore from "../../stores/landmarkStore";
+import moment from "moment";
 
 export default function TableDashboard() {
   const [landmark, setLandmark] = useState([]);
@@ -27,6 +28,11 @@ export default function TableDashboard() {
       console.log(err);
     }
   };
+
+
+  // useEffect(() => {
+  //   console.log(landmark)
+  // }, [landmark])
 
   // ลบสมาชิก
   const hdlDeleteLandmark = async (id) => {
@@ -66,6 +72,10 @@ export default function TableDashboard() {
     const { name, value } = e.target;
     setEditedLandmark({ ...editedLandmark, [name]: value });
   };
+
+  const filterTime = () => {
+    landmarks.createdAt.filter()
+  }
 
   return (
     <div className="overflow-x-auto">
@@ -118,9 +128,9 @@ export default function TableDashboard() {
 
                 <td>{item.id}</td>
 
-                <td>{item.createdAt}</td>
+                <td>{moment(item.createdAt).format('L')}</td>
 
-                <td>{item.updatedAt}</td>
+                <td>{moment(item.updatedAt).format('L')}</td>
 
                 <td>{item.lat}</td>
 

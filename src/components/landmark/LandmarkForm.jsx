@@ -5,38 +5,40 @@ export default function LandmarkForm({ position, form, setForm, hdlSubmit }) {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  // ใช้สำหรับจัดการการเปลี่ยนแปลงของข้อมูลในฟอร์ม
-  // ฟังก์ชันนี้จะอัปเดตค่าฟิลด์ที่ถูกเปลี่ยน โดยใช้ชื่อของ input (เช่น title, detail) เป็น key และค่าที่ผู้ใช้กรอกเป็น value
-  // ค่าของ form จะถูกกระจายด้วย ...form เพื่อรักษาค่าฟิลด์อื่น ๆ ในฟอร์ม
-
-
   return (
-    <form onSubmit={hdlSubmit} className="flex flex-col gap-3 p-4 pt-10">
-      <p>Title :</p>
-      <textarea
-        name="title"
-        onChange={hdlOnchange}
-        value={form.title}
-        type="title"
-        className="textarea textarea-bordered"
-        placeholder="Store Name"
-      ></textarea>
+    <form onSubmit={hdlSubmit} className="bg-slate-400 h-full rounded-lg shadow-lg p-6 space-y-4">
+      <h2 className="text-2xl font-semibold text-center text-blue-600">Add Landmark</h2>
+      
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Title:</label>
+        <textarea
+          name="title"
+          onChange={hdlOnchange}
+          value={form.title}
+          className="textarea textarea-bordered w-full h-24 p-2 mt-1 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+          placeholder="Store Name"
+        />
+      </div>
 
-      <p>Detail :</p>
-      <textarea
-        name="detail"
-        onChange={hdlOnchange}
-        value={form.detail}
-        type="detail"
-        className="textarea textarea-bordered"
-        placeholder="Tel & Detail "
-      ></textarea>
+      <div>
+        <label className="block text-sm font-medium text-gray-700">Detail:</label>
+        <textarea
+          name="detail"
+          onChange={hdlOnchange}
+          value={form.detail}
+          className="textarea textarea-bordered w-full h-24 p-2 mt-1 border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+          placeholder="Tel & Detail"
+        />
+      </div>
 
-      <p>Latitude: {position?.lat.toFixed(2)}</p>
-      <p>Longitude: {position?.lng.toFixed(2)}</p>
-      {/* ถ้ามี position จะดึงค่า lat และ lng ออกมา แล้วแสดงโดยจำกัดทศนิยมไว้ที่ 2 ตำแหน่ง */}
+      <div className="flex justify-between text-gray-500 text-sm">
+        <p>Latitude: <span className="font-semibold text-gray-800">{position?.lat.toFixed(2)}</span></p>
+        <p>Longitude: <span className="font-semibold text-gray-800">{position?.lng.toFixed(2)}</span></p>
+      </div>
 
-      <button className="btn btn-secondary text-xl text-white">Submit</button>
+      <button className="btn btn-secondary w-full text-xl text-white rounded-md transition duration-300 hover:bg-blue-600">
+        Submit
+      </button>
     </form>
   );
 }

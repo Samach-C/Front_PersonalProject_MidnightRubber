@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Popup } from "react-leaflet";
+import { NavigateIcon } from "../../icons";
 
 export default function LandmarkPopup({
   item,
@@ -10,95 +11,124 @@ export default function LandmarkPopup({
   user,
 }) {
   const [isEdit, setIsEdit] = useState(false);
-  // สร้าง state isEdit เพื่อควบคุมว่าขณะนี้ผู้ใช้กำลังแก้ไข landmark อยู่หรือไม่ (true = อยู่ในโหมดแก้ไข)
 
   const handleButtonEdit = (e) => {
     e.preventDefault();
-    e.stopPropagation() // หยุดการแพร่กระจายเหตุการณ์
+    e.stopPropagation();
     setIsEdit(true);
     setForm({
-      title: item?.title|| "",
+      title: item?.title || "",
       detail: item?.detail || "",
     });
   };
 
   const handleCancelEdit = (e) => {
     e.preventDefault();
-    e.stopPropagation() // หยุดการแพร่กระจายเหตุการณ์
+    e.stopPropagation();
     setIsEdit(false);
-    setForm({ title: "", detail: ""}); // ล้างค่าในฟอร์ม
+    setForm({ title: "", detail: "" });
   };
 
-  if(!item) return null // ตรวจสอบว่า item มีค่า เป็น null จะไม่แสดง popup
+  const handleNavigate = () => {
+    if (item?.lat && item?.lng) {
+      const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${item.lat},${item.lng}`;
+      window.open(googleMapsUrl, "_blank");
+    }
+  };
+
+  if (!item) return null;
 
   return (
     <Popup>
-      {isEdit ? (
-        <form
-          className="flex flex-col gap-1"
-          onSubmit={(e) => {
-            e.preventDefault()
-            handleEdit(item?.id, e);
-            setIsEdit(false);
-          }}
-        >
-          <p className="text-blue-300">Title:</p>
-          <input
-            className="border h-10 text-xm"
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={(e) => setForm({ ...form, title: e.target.value })}
-          />
-          <p className="text-orange-300">Detail:</p>
-          <input
-            className="border h-10 text-xm"
-            type="text"
-            name="detail"
-            value={form.detail}
-            onChange={(e) => setForm({ ...form, detail: e.target.value })}
-          />
-          <button className="btn btn-success">Save</button>
-          <button className="btn btn-secondary" onClick={handleCancelEdit}>
-            Cancel
-          </button>
-        </form>
-      ) : (
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col border border-black text-xs">
-            <div className="text-blue-300">Title:</div>
-            <div className="text-lg">{item?.title}</div>
-          </div>
-          <div className="flex flex-col border border-black text-xs">
-            <div className="text-orange-300">Detail:</div>
-            <div className="text-lg">{item?.detail}</div>
-          </div>
+      <div className="p-4 bg-white rounded-lg shadow-lg w-70 space-y-4">
+        {isEdit ? (
+          <form
+            className="flex flex-col gap-3 bg-blue-50 p-4 rounded-lg shadow-md"
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleEdit(item?.id, e);
+              setIsEdit(false);
+            }}
+          >
+            <h3 className="text-lg font-semibold text-center text-blue-600">
+              Edit Landmark
+            </h3>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Title:
+              </label>
+              <input
+                className="border border-gray-300 rounded h-10 p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+                type="text"
+                name="title"
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">
+                Detail:
+              </label>
+              <input
+                className="border border-gray-300 rounded h-10 p-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-400 transition duration-300"
+                type="text"
+                name="detail"
+                value={form.detail}
+                onChange={(e) => setForm({ ...form, detail: e.target.value })}
+              />
+            </div>
+            <div className="flex justify-between">
+              <button className="btn btn-success">Save</button>
+              <button className="btn btn-secondary" onClick={handleCancelEdit}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        ) : (
+          <div className="flex flex-col gap-4">
+            <h3 className="text-lg font-semibold text-center text-blue-600">
+              {item?.title}
+            </h3>
+            <p className="text-gray-600">{item?.detail}</p>
+            <div className="text-xs text-gray-500">
+              Posted by:{" "}
+              <span className="text-blue-600">
+                {item?.user?.firstName || "Unknown User"}
+              </span>
+            </div>
+            <div className="flex flex-col gap-2">
+              {/* Navigation button for Google Maps */}
+              {item?.lat && item?.lng && (
+                <button
+                  className="btn btn-primary btn-sm flex items-center justify-center space-x-1 w-[50px]"
+                  onClick={handleNavigate}
+                >
+                  <NavigateIcon className="w-5 h-5" />
+                  {/* <span>Navigate</span> */}
+                </button>
+              )}
 
-          <div className="text-xs text-gray-500 flex">
-            Posted by:{" "}
-            <div className="text-blue-600">
-              {item?.user?.firstName || "Unknown User"}
+              {/* Only users with permissions can edit and delete */}
+              {(user?.id === item?.userId || user?.role === "ADMIN") && (
+                <div className="flex gap-2">
+                  <button
+                    className="btn btn-warning btn-sm flex-1"
+                    onClick={handleButtonEdit}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="btn btn-danger btn-sm flex-1"
+                    onClick={() => handleDelete(item?.id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              )}
             </div>
           </div>
-
-          {(user?.id === item?.userId || user?.role === "ADMIN") && (
-            <>
-              <button
-                className="btn btn-warning"
-                onClick={handleButtonEdit}
-              >
-                Edit
-              </button>
-              <button
-                className="btn btn-danger"
-                onClick={() => handleDelete(item?.id)}
-              >
-                Delete
-              </button>
-            </>
-          )}
-        </div>
-      )}
+        )}
+      </div>
     </Popup>
   );
 }

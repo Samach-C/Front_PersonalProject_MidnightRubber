@@ -20,9 +20,9 @@ export default function TableDashboard() {
   // ดูข้อมูลแผนที่
   const getLandmarkData = async () => {
     try {
-      const resp = await fetchLandmarks();
+      const resp = await fetchLandmarks(); // เรียกใช้ fetchLandmarks เพื่อดึงข้อมูล
     //   console.log(resp);
-      setLandmark(resp);
+      setLandmark(resp); // เก็บข้อมูลที่ดึงมาใน state
     } catch (err) {
       console.log(err);
     }
@@ -31,7 +31,7 @@ export default function TableDashboard() {
   // ลบสมาชิก
   const hdlDeleteLandmark = async (id) => {
     try {
-      await deleteLandmark(token, id)
+      await deleteLandmark(token, id) // ลบข้อมูล landmark ตาม id
       getLandmarkData()
     } catch (err) {
       console.log(err);
@@ -41,9 +41,9 @@ export default function TableDashboard() {
   // อัพเดตข้อมูล
   const hdlUpdateMessage = async (id) => {
     try {
-      await updateLandmark(token, id, editedLandmark);
-      getLandmarkData();
-      setEditRowId(null);
+      await updateLandmark(token, id, editedLandmark); // อัปเดตข้อมูล landmark
+      getLandmarkData(); // อัปเดตข้อมูลใหม่หลังจากอัปเดต
+      setEditRowId(null); // ยกเลิกการแก้ไขแถว
     } catch (err) {
       console.log(err);
     }
@@ -51,17 +51,17 @@ export default function TableDashboard() {
 
   // การแก้ไขแถว
   const startEditing = (id, currentTitle, currentDetail) => {
-    setEditRowId(id);
-    setEditedLandmark({ title: currentTitle, detail: currentDetail });
+    setEditRowId(id); // กำหนดแถวที่กำลังแก้ไข
+    setEditedLandmark({ title: currentTitle, detail: currentDetail }); // เก็บค่าที่จะแก้ไข
   };
 
   // ยกเลิกการแก้ไข
   const cancelEditing = () => {
-    setEditRowId(null);
-    setEditedLandmark({});
+    setEditRowId(null); // ยกเลิกการแก้ไข
+    setEditedLandmark({}); // ล้างค่าที่แก้ไข
   };
 
-  // จัดการกับการเปลี่ยนแปลงของfill input
+  // จัดการกับการเปลี่ยนแปลงของ fill input
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setEditedLandmark({ ...editedLandmark, [name]: value });

@@ -31,6 +31,13 @@ function LocationMarker({ setPosition, form, setForm, position }) {
   return position === null ? null : <Marker position={position}></Marker>;
 }
 
+// ใช้ useMapEvents เพื่อตรวจจับเหตุการณ์การคลิกบนแผนที่
+// เมื่อคลิกจะ:
+// อัปเดต position ด้วยค่าพิกัดที่คลิก
+// ทำให้แผนที่ "บิน" ไปยังตำแหน่งที่คลิก (flyTo)
+// อัปเดตฟอร์มด้วยค่าพิกัด (ละติจูดและลองจิจูด)
+// ถ้า position ไม่มีค่า (null) จะไม่แสดง Marker บนแผนที่
+
 export default function LandmarkMap({
   landmarks,
   setPosition,
@@ -48,6 +55,10 @@ export default function LandmarkMap({
     iconSize: [25, 25],
   });
   // console.log(serviceIcon)
+
+  // รับ props หลายตัวที่ถูกส่งเข้ามาเช่น landmarks, SearchTerm, user, และฟังก์ชันต่าง ๆ ที่จัดการการแก้ไข ลบ landmark
+  // ใช้ useState เพื่อจัดการตำแหน่งปัจจุบัน (myPosition)
+  // กำหนดไอคอน serviceIcon สำหรับ Marker บนแผนที่ โดยใช้รูปไอคอนจาก tire.png
 
   const MyLocation = ({ myPosition, setMyPosition }) => {
     const map = useMap();
@@ -69,21 +80,28 @@ export default function LandmarkMap({
           (err) => {
             console.error(err);
             if (!myPosition) {
-              setMyPosition([51.505, -0.09]);
-              map.setView([51.505, -0.09], 15);
+              setMyPosition([13, 100]);
+              map.setView([13, 100], 15);
             }
           }
         );
       } else {
         if (!myPosition) {
-          setMyPosition([51.505, -0.09]);
-          map.setView([51.505, -0.09], 15);
+          setMyPosition([13, 100]);
+          map.setView([13, 100], 15);
         }
       }
     }, [map, myPosition, setMyPosition]);
 
     return myPosition ? <Marker position={myPosition}></Marker> : null;
   };
+
+  // ตรวจจับตำแหน่งปัจจุบันของผู้ใช้ด้วย navigator.geolocation
+  // เมื่อได้ตำแหน่ง (latitude, longitude) จะ:
+  // อัปเดต myPosition
+  // ใช้ map.setView() เพื่อเลื่อนแผนที่ไปยังตำแหน่งปัจจุบันของผู้ใช้
+  // ถ้าไม่สามารถหาตำแหน่งได้ จะใช้พิกัดเริ่มต้นเป็น [13, 100] 
+  // แสดง Marker บนตำแหน่งปัจจุบันของผู้ใช้ถ้ามีข้อมูลใน myPosition
 
   let landmarksForMap = null;
 
@@ -97,6 +115,8 @@ export default function LandmarkMap({
     landmarksForMap = [...landmarks];
   }
 
+  // ถ้ามีคำค้นหา (SearchTerm) จะทำการกรองเฉพาะ landmark ที่มีชื่อ (title) ตรงกับคำค้นหานั้น
+  // ถ้าไม่มีคำค้นหา จะใช้ข้อมูล landmark ทั้งหมด
   return (
     <MapContainer
       center={[13, 100]}
@@ -141,14 +161,19 @@ export default function LandmarkMap({
           </LayerGroup>
         </LayersControl.Overlay>
       </LayersControl>
+      
+      {/* MyLocation: แสดงตำแหน่งปัจจุบันของผู้ใช้ */}
+      <MyLocation myPosition={myPosition} setMyPosition={setMyPosition} /> 
 
-      <MyLocation myPosition={myPosition} setMyPosition={setMyPosition} />
+      {/* LocationMarker: แสดง marker ตำแหน่งที่คลิกบนแผนที่ (และอัปเดตฟอร์ม) */}
       <LocationMarker
         position={position}
         setPosition={setPosition}
         form={form}
         setForm={setForm}
       />
+
+      {/* CurrentPositionButton: ปุ่มที่อาจจะใช้สำหรับเลื่อนไปยังตำแหน่งปัจจุบันของผู้ใช้ */}
       <CurrentPositionButton />
     </MapContainer>
   );

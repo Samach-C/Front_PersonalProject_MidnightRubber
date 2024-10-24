@@ -17,9 +17,15 @@ export default function MainMap({ SearchTerm }) {
 
   const [form, setForm] = useState({ title: "", detail: "", lat: "", lng: "" });
   const [formSubmit, setFormSubmit] = useState({ title: "", detail: "" });
+
+  // form: เก็บข้อมูลทั้งหมดของ landmark ที่กำลังถูกแก้ไขหรือเพิ่ม
+  // formSubmit: เก็บข้อมูลฟอร์มที่ต้องการส่ง (ในที่นี้แยกข้อมูลระหว่างตำแหน่งและข้อมูลอื่นๆ)
+  
   useEffect(() => {
     fetchLandmarks();
   }, [fetchLandmarks]);
+
+  // เมื่อคอมโพเนนต์โหลด จะเรียก fetchLandmarks() เพื่อดึงข้อมูล landmark จาก API หรือ store มาแสดง
 
   const hdlSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +40,11 @@ export default function MainMap({ SearchTerm }) {
       console.log(err);
     }
   };
+
+  // เมื่อฟอร์มถูก submit จะป้องกันการ refresh ของหน้า (e.preventDefault())
+  // รวมข้อมูลจาก form และ formSubmit แล้วเรียกฟังก์ชัน createLandmarks() เพื่อสร้าง landmark ใหม่
+  // เมื่อสำเร็จจะรีเซ็ตฟอร์มและตำแหน่ง (setFormSubmit, setPosition)
+  // ดึงข้อมูล landmark ใหม่เพื่ออัปเดตแผนที่
 
   const handleEdit = async (id, e) => {
     // console.log("Click")
@@ -57,6 +68,9 @@ export default function MainMap({ SearchTerm }) {
     }
   };
 
+  // ฟังก์ชันนี้ใช้ในการแก้ไข landmark ที่มี id ที่กำหนด
+  // เช็คสิทธิ์ผู้ใช้ก่อนการแก้ไข (เฉพาะเจ้าของหรือผู้ใช้ที่เป็น ADMIN เท่านั้น)
+  // ตั้งค่า form ให้มีค่าข้อมูลจาก landmark ที่ต้องการแก้ไข แล้วเรียก updateLandmark() เพื่อนำข้อมูลที่แก้ไขไปอัปเดต
 
   const handleDelete = async (id) => {
     const confirmed = window.confirm(
@@ -71,6 +85,9 @@ export default function MainMap({ SearchTerm }) {
       }
     }
   };
+
+  // ฟังก์ชันนี้ใช้ในการลบ landmark โดยจะยืนยันก่อนการลบ (window.confirm)
+  // ถ้ายืนยันการลบ จะเรียก deleteLandmark() เพื่อลบข้อมูล และรีเฟรชข้อมูล landmark ใหม่
   return (
     <>
       {user ? (

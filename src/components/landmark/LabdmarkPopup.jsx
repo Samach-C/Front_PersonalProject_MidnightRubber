@@ -10,6 +10,7 @@ export default function LandmarkPopup({
   user,
 }) {
   const [isEdit, setIsEdit] = useState(false);
+  // สร้าง state isEdit เพื่อควบคุมว่าขณะนี้ผู้ใช้กำลังแก้ไข landmark อยู่หรือไม่ (true = อยู่ในโหมดแก้ไข)
 
   const handleButtonEdit = (e) => {
     e.preventDefault();
@@ -18,8 +19,6 @@ export default function LandmarkPopup({
     setForm({
       title: item?.title|| "",
       detail: item?.detail || "",
-      lat: item?.lat || "",
-      lng: item?.lng || "",
     });
   };
 
@@ -27,10 +26,10 @@ export default function LandmarkPopup({
     e.preventDefault();
     e.stopPropagation() // หยุดการแพร่กระจายเหตุการณ์
     setIsEdit(false);
-    setForm({ title: "", detail: "", lat: "", lng: "" }); // ล้างค่าในฟอร์ม
+    setForm({ title: "", detail: ""}); // ล้างค่าในฟอร์ม
   };
 
-  if(!item) return null // ตรวจสอบว่า item มีค่า
+  if(!item) return null // ตรวจสอบว่า item มีค่า เป็น null จะไม่แสดง popup
 
   return (
     <Popup>

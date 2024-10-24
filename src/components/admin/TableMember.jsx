@@ -35,6 +35,7 @@ export default function TableMember() {
       console.log(err);
     }
   };
+  // ใช้สำหรับลบสมาชิกตาม id โดยจะเรียกใช้ removeMember และเมื่อสำเร็จ จะเรียก getData เพื่อดึงข้อมูลสมาชิกใหม่
 
   // อัปเดตบทบาทสมาชิก
   const hdlUpdateMember = async (e, id) => {
@@ -48,6 +49,7 @@ export default function TableMember() {
   };
 
   const roleOptions = ["ADMIN", "USER"];
+  // เป็นตัวเลือกบทบาทที่ใช้แสดงใน select (ช่องเลือก) คือ "ADMIN" และ "USER"
 
   return (
     <div className="overflow-x-auto">

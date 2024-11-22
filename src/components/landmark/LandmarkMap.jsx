@@ -15,6 +15,9 @@ import CurrentPositionButton from "./CurrentPositionButton";
 import LandmarkPopup from "./LabdmarkPopup";
 import tire from "../../assets/tire.png";
 
+import markerIconPng from "leaflet/dist/images/marker-icon.png"
+import {Icon} from 'leaflet'
+
 function LocationMarker({ setPosition, form, setForm, position }) {
   const map = useMapEvents({
     click: (e) => {
@@ -93,7 +96,7 @@ export default function LandmarkMap({
       }
     }, [map, myPosition, setMyPosition]);
 
-    return myPosition ? <Marker position={myPosition}></Marker> : null;
+    return myPosition ? <Marker position={myPosition} icon={new Icon({iconUrl: markerIconPng, iconSize: [25, 41], iconAnchor: [12, 41]})} ></Marker> : null;
   };
 
   // ตรวจจับตำแหน่งปัจจุบันของผู้ใช้ด้วย navigator.geolocation

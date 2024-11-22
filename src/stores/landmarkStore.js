@@ -7,7 +7,7 @@ const useLandmarkStore = create((set, get) => ({
 
     createLandmarks:  async(form, token) => {
         try {
-            const response = await axios.post("http://localhost:5588/landmark", form, {
+            const response = await axios.post(import.meta.env.VITE_HOST_IP+"/landmark", form, {
                 headers: { Authorization: `Bearer ${token}` },
               });
               set((state) => ({ landmarks:[...get().landmarks, response.data]}))
@@ -19,7 +19,7 @@ const useLandmarkStore = create((set, get) => ({
     // อ่านข้อมูล landmark
     fetchLandmarks: async() => {
         try {
-            const response = await axios.get("http://localhost:5588/landmark")
+            const response = await axios.get(import.meta.env.VITE_HOST_IP+"/landmark")
             // console.log("Fetched landmarks:", response.data)
             set({ landmarks: response.data })
             return response.data
@@ -32,7 +32,7 @@ const useLandmarkStore = create((set, get) => ({
     // อัพเดต landmark
     updateLandmark: async(token, id, updatedData) => {
         try {
-            const response = await axios.patch(`http://localhost:5588/landmark/${id}`, updatedData, {
+            const response = await axios.patch(import.meta.env.VITE_HOST_IP+`/landmark/${id}`, updatedData, {
                 headers: {
                     Authorization: `Bearer ${token}`
                   },
@@ -52,7 +52,7 @@ const useLandmarkStore = create((set, get) => ({
     // ลบ landmark
     deleteLandmark: async(token, id) => {
         try {
-            await axios.delete(`http://localhost:5588/landmark/${id}`, {
+            await axios.delete(import.meta.env.VITE_HOST_IP+`/landmark/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`
                   },

@@ -23,7 +23,7 @@ export default function Register({input, setInput, formErrors, setFormErrors}) {
 
       try {
       const result = await axios.post(
-        "http://localhost:5588/register",
+        import.meta.env.VITE_HOST_IP+"/register",
         input
       );
       // console.log(result.data)

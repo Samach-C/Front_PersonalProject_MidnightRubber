@@ -8,7 +8,7 @@ const useMemberStore = create((set, get) => ({
     // ฟังก์ชันดึงข้อมูลสมาชิก
     listMember: async () => {
       try {
-        const response = await axios.get("http://localhost:5588/member");
+        const response = await axios.get(import.meta.env.VITE_HOST_IP+"/member");
         set({ members: response.data })
         return response.data; // อัปเดต state members
       } catch (error) {
@@ -20,7 +20,7 @@ const useMemberStore = create((set, get) => ({
     // ฟังก์ชันลบสมาชิก
     removeMember: async (token, id) => {
       try {
-        await axios.delete(`http://localhost:5588/member/${id}`, {
+        await axios.delete(import.meta.env.VITE_HOST_IP+`/member/${id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -36,7 +36,7 @@ const useMemberStore = create((set, get) => ({
     // ฟังก์ชันอัปเดตสมาชิก
     updateMember: async (token, id, form) => {
       try {
-        await axios.patch(`http://localhost:5588/member/${id}`, form, {
+        await axios.patch(import.meta.env.VITE_HOST_IP+`/member/${id}`, form, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

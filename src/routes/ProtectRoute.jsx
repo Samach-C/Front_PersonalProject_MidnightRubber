@@ -16,7 +16,7 @@ const ProtectRoute = ({ element, allow }) => {
   const checkRole = async () => {
     try {
       const resp = await axios.post(
-        "http://localhost:5588/current-user",
+        import.meta.env.VITE_HOST_IP+"/current-user",
         {},
         {
           headers: {

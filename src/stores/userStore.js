@@ -8,7 +8,7 @@ const useUserStore = create(persist ((set, get) => ({
     user: null,
     token: "",
     login: async(input) => {
-        const result = await axios.post("http://localhost:5588/login", input)
+        const result = await axios.post(import.meta.env.VITE_HOST_IP+"/login", input)
         set({token : result.data.token, user : result.data.user})
         // console.log(result.data)
         return result.data
